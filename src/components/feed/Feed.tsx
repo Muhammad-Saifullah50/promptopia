@@ -41,10 +41,6 @@ const Feed = () => {
   const [posts, setposts] = useState<Post[]>([])
   // console.log(posts)
 
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-
-  }
-
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch('/api/prompt')
@@ -55,12 +51,25 @@ const Feed = () => {
     fetchPosts();
   }, [])
 
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setsearchText(e.target.value)
+    
+    const usernames = posts.map((post) => post.creator.username)
+
+    if (usernames.includes(searchText)) {
+      console.log('includes')
+      return posts
+    }
+  }
+
+ 
+
   return (
     <section className='feed'>
       <form className='relative w-full flex-center'>
         <input
           type='text'
-          placeholder='search for a tag or a username'
+          placeholder='search for anything (a tag or a username)'
           value={searchText}
           onChange={handleSearchChange}
           required
