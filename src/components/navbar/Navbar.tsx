@@ -2,7 +2,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { signIn, signOut, getSession, getProviders } from 'next-auth/react'
+import { signIn, signOut, getSession, getProviders, useSession } from 'next-auth/react'
 
 type Provider = { // we will get these properties from the provider
   id: string;
@@ -16,10 +16,11 @@ type Provider = { // we will get these properties from the provider
 type Providers = Record<string, Provider>
 
 const Navbar = () => {
-  const isUserLoggedIn = true
+  const { data: session } = useSession();
 
   const [toggleMenu, setToggleMenu] = useState<boolean>(false)
   const [providers, setProviders] = useState<Providers | null>(null)
+
   useEffect(() => {
     const fetchProviders = async () => {
       const response = await getProviders();
@@ -28,6 +29,7 @@ const Navbar = () => {
     }
     fetchProviders();
   }, [])
+
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href='/' className="flex gap-2 flex-center">
@@ -45,19 +47,20 @@ const Navbar = () => {
 
       <div className="sm:flex hidden">
 
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href='/create-prompt' className="black_btn">
               Create Post
             </Link>
 
-            <button type="button" onClick={() => signOut} className="outline_btn">
+            <button type="button" onClick={() => signOut()} className="outline_btn">
               Sign Out
             </button>
 
             <Link href='/profile'>
               <Image
-                src='/assets/images/logo.svg'
+                //@ts-ignore
+                src={session?.user.image}
                 width={37}
                 height={37}
                 className="rounded-full"
@@ -85,10 +88,11 @@ const Navbar = () => {
 
       <div className="flex sm:hidden relative">
 
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
-              src='/assets/images/logo.svg'
+              //@ts-ignore
+              src={session?.user.image}
               width={37}
               height={37}
               className="rounded-full"
