@@ -90,7 +90,7 @@ const Feed = () => {
         />
         {searchText !== '' && searchResult.length === 0
           ?
-          <p className='text-lg font-medium mt-10'>Oops! No results found for '{searchText}'</p>
+          <p className='text-lg font-medium mt-10'>Oops! No results found for &apos;{searchText}&apos;</p>
           : null}
       </form>
       {searchText ? (
