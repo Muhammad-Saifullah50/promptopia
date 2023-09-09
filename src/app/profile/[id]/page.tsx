@@ -5,12 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-type User = {
-    name: string
-    email: string
-    id: string
-    image: string
-}
+
 const ProfilePage = () => {
 
     const { data: session } = useSession();
