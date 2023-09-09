@@ -29,7 +29,7 @@ const Navbar = () => {
     }
     fetchProviders();
   }, [])
-
+  const userId = (session?.user as { id: string })?.id
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href='/' className="flex gap-2 flex-center">
@@ -57,7 +57,7 @@ const Navbar = () => {
               Sign Out
             </button>
 
-            <Link href='/profile'>
+            <Link href={`/profile/${userId}`}>
               <Image
                 //@ts-ignore
                 src={session?.user.image}
@@ -105,7 +105,7 @@ const Navbar = () => {
             {toggleMenu && (
               <div className="dropdown">
                 <Link
-                  href='/profile'
+                  href={`/profile/${userId}`}
                   className="dropdown_link"
                   onClick={() => setToggleMenu(false)}
                 >

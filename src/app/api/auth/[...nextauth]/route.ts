@@ -2,6 +2,8 @@ import NextAuth from "next-auth/next";
 import GoogleProvider from 'next-auth/providers/google'
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user/user";
+import jsonwebtoken from 'jsonwebtoken'
+import { JWT } from "next-auth/jwt";
 
 
 const handler = NextAuth({
@@ -11,6 +13,22 @@ const handler = NextAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!
         })
     ],
+    jwt: {
+        encode: ({ secret, token }) => {
+            const encodedToken = jsonwebtoken.sign({
+                ...token,
+                iss: 'promptopia',
+                exp: Math.floor(Date.now() / 1000) + 60 * 60 // 13h
+            }, secret)
+            // console.log(encodedToken, "encodedToken")
+            return encodedToken
+        },
+        decode: async ({ secret, token }) => {
+            const decodedToken = jsonwebtoken.verify(token!, secret) as JWT
+            // console.log(decodedToken, "decodedToken")
+            return decodedToken
+        }
+    },
     callbacks: {
         async session({ session }: any) {
 

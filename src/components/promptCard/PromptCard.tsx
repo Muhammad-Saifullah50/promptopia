@@ -8,7 +8,7 @@ import { Post } from '../feed/Feed'
 
 type PromptCardProps = {
   post: Post
-  handleTagClick?: () => void
+  handleTagClick?: (tagname: string) => void
   handleEdit?: () => void
   handleDelete?: () => void
 }
@@ -20,7 +20,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }: PromptCa
   const pathName = usePathname();
   const [copied, setCopied] = useState('')
   const userId = (session?.user as { id: string })?.id
-
+  
   const handleCopy = () => {
     setCopied(post.prompt)
     navigator.clipboard.writeText(post.prompt)  //copies to clipboard
@@ -64,7 +64,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }: PromptCa
         {post.tag}
       </p>
 
-      {userId === post.creator._id && pathName === '/profile' && (
+      {userId === post.creator._id && pathName === `/profile/${userId}` && (
         <div className='mt-5 flex-center gap-4 border-t border-gray-200 pt-3'>
           <button className='font-inter text-sm green_gradient cursor-pointer '
             onClick={handleEdit}>

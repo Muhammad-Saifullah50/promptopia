@@ -5,12 +5,20 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-const MyProfile = () => {
+type User = {
+    name: string
+    email: string
+    id: string
+    image: string
+}
+const ProfilePage = () => {
+
     const { data: session } = useSession();
     const router = useRouter()
-    const userId = (session?.user as { id: string })?.id
 
     const [posts, setPosts] = useState([])
+    const userId = (session?.user as { id: string })?.id
+
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -48,8 +56,9 @@ const MyProfile = () => {
     }
 
     return (
+
         <Profile
-            name='My'
+            name={(session?.user as { name: string })?.name || ''}
             desc='Welcome to your personalized profile page'
             data={posts}
             handleEdit={handleEdit}
@@ -58,4 +67,4 @@ const MyProfile = () => {
     )
 }
 
-export default MyProfile
+export default ProfilePage

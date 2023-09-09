@@ -15,7 +15,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }: ProfileProps) =
   return (
     <section>
       <h1 className='w-full head_text text-left'>
-        <span className='blue_gradient'>{name} Profile</span>
+        <span className='blue_gradient capitalize'>{name} Profile</span>
       </h1>
       <p className='desc text-left'>{desc}</p>
 

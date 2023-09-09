@@ -1,5 +1,5 @@
 "use client"
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { PromptCard } from '..'
 
 export type Post = {
@@ -19,7 +19,7 @@ export type Post = {
 
 type PromptCardListProps = {
   data: Post[]
-  handleTagClick: () => void
+  handleTagClick: (tagname: string) => void
 }
 
 const PromptCardList = ({ data, handleTagClick }: PromptCardListProps) => {
@@ -39,7 +39,9 @@ const PromptCardList = ({ data, handleTagClick }: PromptCardListProps) => {
 const Feed = () => {
   const [searchText, setsearchText] = useState("")
   const [posts, setposts] = useState<Post[]>([])
+  const [searchResult, setsearchResults] = useState<Post[]>([])
   // console.log(posts)
+  // console.log(searchText)
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -51,22 +53,33 @@ const Feed = () => {
     fetchPosts();
   }, [])
 
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setsearchText(e.target.value)
-    
-    const usernames = posts.map((post) => post.creator.username)
+  const filterPrompts = (searchText: string) => {
+    const escapedSearchText = searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); const regex = new RegExp(escapedSearchText, 'i') // i flag for case insensitive search
 
-    if (usernames.includes(searchText)) {
-      console.log('includes')
-      return posts
-    }
+
+    return posts.filter((post) =>
+      regex.test(post.creator.username) ||
+      regex.test(post.prompt) ||
+      regex.test(post.tag)
+    )
   }
 
- 
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setsearchText(e.target.value)
+    const searchResult = filterPrompts(e.target.value)
 
+    setsearchResults(searchResult)
+
+  }
+
+  const handleTagClick = (tagname: string) => {
+    setsearchText(tagname)
+    const searchResult = filterPrompts(tagname)
+    setsearchResults(searchResult)
+  }
   return (
-    <section className='feed'>
-      <form className='relative w-full flex-center'>
+    <section className='feed flex-col'>
+      <form className='relative w-full flex-center flex-col ' >
         <input
           type='text'
           placeholder='search for anything (a tag or a username)'
@@ -75,12 +88,22 @@ const Feed = () => {
           required
           className='search_input peer'
         />
+        {searchText !== '' && searchResult.length === 0
+          ?
+          <p className='text-lg font-medium mt-10'>Oops! No results found for '{searchText}'</p>
+          : null}
       </form>
+      {searchText ? (
+        <PromptCardList
+          data={searchResult}
+          handleTagClick={handleTagClick}
+        />
 
-      <PromptCardList
-        data={posts}
-        handleTagClick={() => { }}
-      />
+      ) : (
+        <PromptCardList
+          data={posts}
+          handleTagClick={handleTagClick}
+        />)}
     </section>
   )
 }
