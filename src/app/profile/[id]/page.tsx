@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
 
-const ProfilePage = () => {
+const ProfilePage = async () => {
 
-    const { data: session } = useSession();
+    const { data: session } =useSession();
     const router = useRouter()
 
     const [posts, setPosts] = useState([])
