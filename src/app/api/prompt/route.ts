@@ -8,10 +8,10 @@ export const GET = async () => {
 
         const prompts = await Prompt.find({}).populate('creator')
 
-        return NextResponse.json(prompts, { status: 200 })
+        return new Response(JSON.stringify(prompts), { status: 200 })
     } catch (error) {
         console.error(error)
-        return NextResponse.json("Failed to fetch prompts", { status: 500 })
+        return new Response(JSON.stringify("Failed to fetch prompts"), { status: 500 })
 
     }
 }
