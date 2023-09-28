@@ -42,7 +42,7 @@ const ProfilePage = async () => {
                         method: 'DELETE'
                     })
 
-                const filteredPosts = posts.filter((p: Post) => p._id !== post._id)
+                const filteredPosts = posts.filter((p: Post) => p?._id !== post?._id)
                 setPosts(filteredPosts)
             } catch (error) {
                 console.log(error)
