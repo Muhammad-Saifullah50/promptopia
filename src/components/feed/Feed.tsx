@@ -58,7 +58,7 @@ const Feed = () => {
 
 
     return posts.filter((post) =>
-      regex.test(post.creator.username) ||
+      regex.test(post.creator?.username) ||
       regex.test(post.prompt) ||
       regex.test(post.tag)
     )
