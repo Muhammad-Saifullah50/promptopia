@@ -33,7 +33,7 @@ const handler = NextAuth({
         async session({ session }: any) {
 
             const sessionUser = await User.findOne({
-                email: session.user.email
+                email: session?.user?.email
             })
             if (sessionUser) {
                 session.user.id = sessionUser._id.toString();
@@ -49,12 +49,12 @@ const handler = NextAuth({
 
                 // checking if user already exists
                 const userExists = await User.findOne({
-                    email: profile.email
+                    email: profile?.email
                 })
                 // if not create new user
                 if (!userExists) {
                     await User.create({
-                        email: profile.email,
+                        email: profile?.email,
                         username: profile.name.replace(' ', "").toLowerCase(),
                         image: profile.picture
                     })
