@@ -60,7 +60,7 @@ const Navbar = () => {
             <Link href={`/profile/${userId}`}>
               <Image
                 //@ts-ignore
-                src={session?.user.image}
+                src={session?.user?.image}
                 width={37}
                 height={37}
                 className="rounded-full"
@@ -92,7 +92,7 @@ const Navbar = () => {
           <div className="flex">
             <Image
               //@ts-ignore
-              src={session?.user.image}
+              src={session?.user?.image}
               width={37}
               height={37}
               className="rounded-full"
