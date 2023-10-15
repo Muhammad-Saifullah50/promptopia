@@ -44,6 +44,7 @@ const handler = NextAuth({
         },
 
         async signIn({ profile }: any) {
+            'use server'
             try {
                 await connectToDB()
 
